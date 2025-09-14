@@ -1,0 +1,19 @@
+services:
+  - type: web
+    name: transport-manager
+    env: python
+    plan: free
+    buildCommand: |
+      pip install -r requirements.txt
+      python manage.py migrate
+    startCommand: gunicorn transport_manager.wsgi:application --bind 0.0.0.0:10000
+    envVars:
+      - key: SECRET_KEY
+        generateValue: true
+      - key: DEBUG
+        value: "0"
+      - key: ALLOWED_HOSTS
+        value: "*"
+databases:
+  - name: transport-postgres
+    plan: free

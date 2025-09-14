@@ -1,0 +1,22 @@
+version: "3.9"
+services:
+  db:
+    image: postgres:15
+    environment:
+      POSTGRES_DB: transportdb
+      POSTGRES_USER: transport
+      POSTGRES_PASSWORD: transport
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+  web:
+    build: .
+    ports:
+      - "8000:8000"
+    environment:
+      SECRET_KEY: change-me
+      DEBUG: "0"
+      ALLOWED_HOSTS: "*"
+      DATABASE_URL: postgres://transport:transport@db:5432/transportdb
+    depends_on: [db]
+volumes:
+  pgdata:
